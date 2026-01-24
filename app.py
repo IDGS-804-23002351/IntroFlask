@@ -1,3 +1,4 @@
+import math
 #se realiza la importación de flask
 from flask import Flask, render_template,request
 #se coloca el nombre
@@ -56,13 +57,48 @@ def operas():
              <input type="submit" value="Submit">
         </form>
     '''
-@app.route("/operasBas")
+@app.route("/operasBas",methods=['GET','POST'])
 def operasBas():
-    return render_template('operasBas.html')
+    res = None
+    tipoOperacion = ''
+    n1 = 0
+    n2 = 0
+    if request.method == 'POST':
+        n1 = request.form.get('num1')
+        n2 = request.form.get('num2')
+        if request.form.get('operacion')=='suma':
+            res = float(n1)+float(n2)
+            tipoOperacion = '+'
+        elif request.form.get('operacion')=='resta':
+            res = float(n1)-float(n2)
+            tipoOperacion = '-'
+        elif request.form.get('operacion')=='multiplicar':
+            res = float(n1)*float(n2)
+            tipoOperacion = '*'
+        elif request.form.get('operacion')=='dividir':
+            res = float(n1)/float(n2)
+            tipoOperacion = '%'
+    return render_template('operasBas.html',res=res,n1=n1,n2=n2,tipoOperacion=tipoOperacion)
 @app.route("/resultado",methods=['GET','POST'])
 def resul1():
     n1 = request.form.get('num1')
     n2 = request.form.get('num2')
     return f'<h1>La suma es: {float(n1) + float(n2)}</h1>'
+@app.route("/DistanciaEntrePuntos",methods=['GET','POST'])
+def DistanciaEntrePuntos():
+    res = None
+    n1 = 0
+    n2 = 0
+    if request.method == 'POST':
+        x1 = request.form.get('x1')
+        x2 = request.form.get('x2')
+        y1 = request.form.get('y1')
+        y2 = request.form.get('y2')
+        op1= int(x1)-int(x2)
+        op2= int(y1)-int(y2)
+        op3= math.pow(op1,2)
+        op4= math.pow(op2,2)
+        res = math.sqrt((op3)+(op4))
+    return render_template('DistanciaEntrePuntos.html',res=res)
 if __name__ == '__main__':
     app.run(debug=True)

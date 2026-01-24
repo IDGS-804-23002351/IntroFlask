@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+{%import "_macros.html" as macros %}
+    <form method="post" action="/DistanciaEntrePuntos">
+        {{macros.datos('x1','Escribe tu x1','number')}}
+        {{macros.datos('x2','Escribe tu x2','number')}}
+        {{macros.datos('y1','Escribe tu y1','number')}}
+        {{macros.datos('y2','Escribe tu y2','number')}}
+        <button type="submit" class="btn  btn-primary">Calcular</button>
+    </form>
+    <h1>resultado es: {{res}}</h1>
+{% endblock %}
