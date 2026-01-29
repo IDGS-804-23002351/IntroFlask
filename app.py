@@ -1,9 +1,12 @@
 import math
 #se realiza la importación de flask
 from flask import Flask, render_template,request
+import forms
+from flask_wtf.csrf import CSRFProtect
 #se coloca el nombre
 app = Flask(__name__)
-
+app.secret_key='clave_secreta'
+csrf=CSRFProtect()
 #este es un decorador
 @app.route('/')
 
@@ -100,5 +103,20 @@ def DistanciaEntrePuntos():
         op4= math.pow(op2,2)
         res = math.sqrt((op3)+(op4))
     return render_template('DistanciaEntrePuntos.html',res=res)
+
+@app.route("/alumnos", methods=['GET', 'POST'])
+def alumnos():
+    mat, nom, ape, email = 0, "", "", ""
+    alumno_clas = forms.UserForm(request.form)
+    
+    if request.method == 'POST' and alumno_clas.validate():
+        mat = alumno_clas.matricula.data
+        nom = alumno_clas.nombre.data
+        ape = alumno_clas.apellido.data
+        email = alumno_clas.correo.data 
+        
+    return render_template("alumnos.html", form=alumno_clas, mat=mat, nom=nom, ape=ape, email=email)
+
 if __name__ == '__main__':
+    csrf.init_app(app)
     app.run(debug=True)
