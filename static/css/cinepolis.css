@@ -1,0 +1,96 @@
+body {
+    background-color: #0056ab; 
+    color: white;
+    font-family: 'Tahoma', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.main-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.top-banner {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.top-banner span {
+    background-color: white;
+    color: black;
+    padding: 5px 30px;
+    font-weight: bold;
+    font-size: 40px;
+    border: 1px solid #000;
+    font-family: 'Ladida', serif;
+}
+fieldset {
+    border: 1px solid #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+legend {
+    font-style: italic;
+    font-size: 20px;
+    padding: 0 10px;
+}
+.flex-row {
+    display: flex;
+    gap: 30px;
+}
+
+.col-left { flex: 2; }
+.col-right { flex: 1; }
+
+.form-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-item input[type="text"], 
+.form-item input[type="number"] {
+    width: 150px;
+    border: none;
+    padding: 3px;
+    color: black;
+}
+.brand-logo {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.brand-logo h1 {
+    font-size: 65px;
+    margin: 0;
+    font-weight: 900;
+}
+
+.brand-logo p {
+    letter-spacing: 6px;
+    font-weight: bold;
+    margin-top: -10px;
+    font-size: 18px;
+}
+
+.actions-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-gray {
+    background-color: #c0c0c0;
+    color: black;
+    border: 2px solid #808080;
+    padding: 5px 25px;
+    font-family: 'Tahoma';
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-gray:active {
+    border: 2px inset #fff;
+}

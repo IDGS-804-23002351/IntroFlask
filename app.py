@@ -116,7 +116,109 @@ def alumnos():
         email = alumno_clas.correo.data 
         
     return render_template("alumnos.html", form=alumno_clas, mat=mat, nom=nom, ape=ape, email=email)
+@app.route("/cinepolis", methods=['GET', 'POST'])
+def cinepolis():
+    form = forms.CinepolisForm(request.form)
+    valor_a_pagar = ""
+    mensaje_error = ""
+    
+    if request.method == 'POST':
+        if form.validate():
+            cant_compradores = form.CantidadCompradores.data
+            cant_boletas = form.CantidadBoletas.data
+            tarjeta = form.TarjetaCineco.data
+            
+            max_permitido = cant_compradores * 7
+            
+            if cant_boletas > max_permitido:
+                mensaje_error = f"No se pueden comprar más de 7 boletas por persona (Máx: {max_permitido})"
+            else:
+                precio_unidad = 12.00
+                subtotal = cant_boletas * precio_unidad
+                
+                if cant_boletas > 5:
+                    descuento = 0.15
+                elif 3 <= cant_boletas <= 5:
+                    descuento = 0.10
+                else:
+                    descuento = 0.0
+                
+                total = subtotal * (1 - descuento)
+                
+                if tarjeta == 'si':
+                    total = total * 0.90
+                
+                valor_a_pagar = f"{total:,.0f}"
+            
+    return render_template('cinepolis.html', form=form, valor_a_pagar=valor_a_pagar, mensaje_error=mensaje_error)
 
+@app.route('/Examen_Parcial_Pizzas', methods=['GET', 'POST'])
+def ExamenParcialPizzas():
+    form = forms.ExamenParcialPizzasForm(request.form)
+    pizzas = []
+    total_general = 0
+    name = ""
+    direccion = ""
+    telefono = ""
+    
+    if request.method == 'POST' and form.validate():
+        name = form.nombre.data
+        direccion = form.direccion.data
+        telefono = form.telefono.data
+        num_pizzas = form.num_pizzas.data
+        tamanio = form.tamanio.data
+        ingredientes = form.ingredientes.data  
+        
+        precios_tamanio = {
+            'chica': 40,
+            'mediana': 80,
+            'grande': 120,
+            'pequeña': 160
+        }
+        
+        precios_ingredientes = {
+            'jamon': 10,
+            'piña': 10,
+            'champiñones': 10
+        }
+        
+        textos_tamanio = {
+            'chica': 'Chica',
+            'mediana': 'Mediana',
+            'grande': 'Grande',
+            'pequeña': 'Pequeña'
+        }
+        
+        textos_ingredientes = {
+            'jamon': 'Jamón',
+            'piña': 'Piña',
+            'champiñones': 'Champiñones'
+        }
+        
+        precio_tamanio = precios_tamanio[tamanio]
+        precio_ingredientes = 0
+        ingredientes_text = []
+        
+        if ingredientes:
+            precio_ingredientes = sum(precios_ingredientes[i] for i in ingredientes)
+            ingredientes_text = [textos_ingredientes[i] for i in ingredientes]
+        
+        total_por_pizza = precio_tamanio + precio_ingredientes
+        
+        for i in range(num_pizzas):
+            pizza = {
+                'numero': i + 1,
+                'tamanio': textos_tamanio[tamanio],
+                'ingredientes': ', '.join(ingredientes_text) if ingredientes_text else "Ninguno",
+                'total': total_por_pizza
+            }
+            pizzas.append(pizza)
+        
+        total_general = total_por_pizza * num_pizzas
+        
+        return render_template('Examen_Parcial_Pizzas.html',  form=form, name=name, direccion=direccion,telefono=telefono,pizzas=pizzas,total_general=total_general)
+    
+    return render_template('Examen_Parcial_Pizzas.html', form=form)
 if __name__ == '__main__':
     csrf.init_app(app)
     app.run(debug=True)

@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% import "_macros.html" as macros %}
+
+<form action="" method="post" novalidate>
+    {{ form.csrf_token }}
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    
+    {{ macros.camposPizzas(form.nombre) }}
+    {{ macros.camposPizzas(form.direccion) }}
+    {{ macros.camposPizzas(form.telefono) }}
+    {{ macros.camposPizzas(form.num_pizzas) }}
+    
+    <!-- Radio buttons para tamaño -->
+    <div class="form-group">
+        <label>{{ form.tamanio.label.text }}</label>
+        {% for subfield in form.tamanio %}
+        <div class="form-check">
+            {{ subfield(class="form-check-input") }}
+            {{ subfield.label(class="form-check-label") }}
+        </div>
+        {% endfor %}
+        {% if form.tamanio.errors %}
+        <div style="color: #ff0000; font-size: 12px; margin-top: 5px;">
+            {% for error in form.tamanio.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Checkboxes para ingredientes -->
+    <div class="form-group">
+        <label>{{ form.ingredientes.label.text }}</label>
+        {% for subfield in form.ingredientes %}
+        <div class="form-check">
+            {{ subfield(class="form-check-input") }}
+            {{ subfield.label(class="form-check-label") }}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <input type="submit" name="btn" value="Guardar" class="btn btn-primary">
+</form>
+
+{% if name %}
+<hr>
+<h2>Datos del Cliente</h2>
+<p><strong>Nombre:</strong> {{ name }}</p>
+<p><strong>Dirección:</strong> {{ direccion }}</p>
+<p><strong>Teléfono:</strong> {{ telefono }}</p>
+
+<h2>Detalle del Pedido</h2>
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th># Pizza</th>
+            <th>Tamaño</th>
+            <th>Ingredientes</th>
+            <th>Precio Unitario</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pizza in pizzas %}
+        <tr>
+            <td>{{ pizza.numero }}</td>
+            <td>{{ pizza.tamanio }}</td>
+            <td>{{ pizza.ingredientes }}</td>
+            <td>${{ pizza.total }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="table-primary">
+            <td colspan="3" class="text-right"><strong>Total de {{ pizzas|length }} pizzas:</strong></td>
+            <td><strong>${{ total_general }}</strong></td>
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

@@ -1,19 +1,72 @@
-{%macro datos(name,placeholder,type='text')%}
+{% macro datos(name,placeholder,type='text') %}
 <div class="mb-3">
     <label for="{{name}}" class="for-label">{{name}}</label>
     <input type="{{type}}" class="form-control" id="{{name}}" name="{{name}}" placeholder="{{placeholder}}">
 </div>
-{%endmacro%}
-{% macro camposNuevos(field) %} 
-<td>{{field.label}}</td>
-<dd>{{field(**kwargs) | safe}}</dd>
+{% endmacro %}
 
-{%if field.errors%}
-<ul>
-    {%for error in field.errors%}
-    <li style="color: red">{{error}}</li>
-    {%endfor%}
-</ul>
-{%endif%}
+{% macro camposNuevos(field) %}
+<div class="form-group">
+    {{ field.label }}
+    {{ field(**kwargs) | safe }}
+    {% if field.errors %}
+        <ul style="color: red; margin: 5px 0; padding-left: 15px;">
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endmacro %}
 
-{%endmacro%}
+{% macro camposcinepolis(field) %}
+<div class="form-group">
+    <label>{{ field.label.text }}</label>
+    {{ field(class="input-data")|safe }}
+    {% if field.errors %}
+        <div style="color: #ff0000; font-size: 12px; margin-top: 5px;">
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro radioButton(name,type='text',text='') %}
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{text}}" id="{{name}}" checked>
+  <label class="form-check-label" for="checkChecked">
+    {{text}}
+  </label>
+</div>
+{% endmacro %}
+
+{% macro camposPizzas(field) %}
+<div class="form-group">
+    <label>{{ field.label.text }}</label>
+    {{ field(class="form-control")|safe }}
+    {% if field.errors %}
+        <div style="color: #ff0000; font-size: 12px; margin-top: 5px;">
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endmacro %}
+{% macro radioButtonPizzas(name,type='text',text='') %}
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="{{text}}" id="{{name}}" checked>
+  <label class="form-check-label" for="checkChecked">
+    {{text}}
+  </label>
+</div>
+{% endmacro %}
+{% macro select(name,options,selected='') %}
+<select name="{{name}}" id="{{name}}">
+    {% for option in options %}
+        <option value="{{option}}" {% if option == selected %}selected{% endif %}>{{option}}</option>
+    {% endfor %}
+</select>
+{% endmacro %}
